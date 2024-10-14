@@ -23,14 +23,12 @@ function App() {
             <main className="container mx-auto mt-4 px-4">
               <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/products" element={<ProductList />} />
-                <Route element={<PrivateRoute />}>
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/edit-product/:id" element={<EditProduct />} />
-                  <Route path="/add-product" element={<AddProduct />} />
-                </Route>
+
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/edit-product/:id" element={<EditProduct />} />
+                <Route path="/add-product" element={<AddProduct />} />
               </Routes>
             </main>
             <ToastContainer />

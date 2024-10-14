@@ -35,8 +35,6 @@ export const AuthProvider = ({ children }) => {
       }
 
       localStorage.setItem("token", data.token);
-      // Optionally, you can still store some user info if needed
-      localStorage.setItem("user", JSON.stringify({ email, id: data.userId }));
       return data;
     } catch (error) {
       console.error("Login error:", error);
@@ -60,8 +58,6 @@ export const AuthProvider = ({ children }) => {
       }
 
       localStorage.removeItem("token");
-      // Also remove any other stored user info if you have any
-      localStorage.removeItem("user");
     } catch (error) {
       console.error("Logout error:", error);
       throw error;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -12,16 +13,16 @@ const ProductList = () => {
   }, []);
 
   const fetchProducts = async () => {
-    debugger;
-
     try {
       const response = await fetch(`${base_url}/product/all`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
+      console.log(response);
+
       if (!response.ok) {
         throw new Error("Failed to fetch products");
       }
