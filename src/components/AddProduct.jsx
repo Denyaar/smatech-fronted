@@ -50,7 +50,6 @@ const AddProduct = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       return response.data;
     } catch (error) {
       console.error("Error while adding product", error);
