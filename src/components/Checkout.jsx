@@ -45,7 +45,7 @@ const Checkout = () => {
         toast.error("Payment failed please check your card details");
       }
     } catch (error) {
-      toast.error("Failed to process payment: " + (error.response?.data?.message || error.message));
+      toast.error("Failed to process payment please try again later");
     }
   };
 

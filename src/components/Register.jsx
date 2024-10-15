@@ -19,11 +19,17 @@ const Register = () => {
       return toast.error("Passwords do not match");
     }
     try {
-      await register({ name, email, password, address, mobile });
+      const response = await register({ name, email, password, address, mobile });
+
+      if (response.message === "Email is already in use!") {
+        return;
+      }
+
       toast.success("User Registered successfully");
       navigate("/login");
     } catch (error) {
-      toast.error("Failed to register");
+      // toast.error("Failed to register");
+      console.log(error);
     }
   };
 

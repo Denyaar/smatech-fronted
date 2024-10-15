@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -76,8 +77,9 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(userData),
       });
 
-      if (!response.status === 200) {
-        throw new Error("Registration failed");
+      if (response.status === 400) {
+        toast.error("User already exists");
+        return;
       }
 
       const data = await response.json();
