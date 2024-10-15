@@ -11,10 +11,9 @@ export const AuthProvider = ({ children }) => {
   const base_url = "http://127.0.0.1:8990/api";
 
   useEffect(() => {
-    // Check if user is logged in (e.g., by checking local storage or making an API call)
     const loggedInUser = localStorage.getItem("user");
     if (loggedInUser) {
-      setUser(JSON.parse(loggedInUser));
+      setUser(localStorage.getItem("user"));
     }
   }, []);
 

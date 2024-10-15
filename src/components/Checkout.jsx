@@ -1,26 +1,58 @@
 import React, { useState } from "react";
 import { useCart } from "../contexts/CartContext";
-import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();
-  const { user } = useAuth();
-  const [address, setAddress] = useState(user.address || "");
+  const [expiryMonth, setExpiryMonth] = useState("");
+  const [expiryYear, setExpiryYear] = useState("");
+  const BASE_URL = "http://127.0.0.1:8990";
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Here you would typically send the order to your backend
-      // For this example, we'll just simulate a successful order
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      clearCart();
-      toast.success("Order placed successfully!");
+      const response = await axios.post(
+        BASE_URL + "/api/payments/process",
+        {
+          amount: total,
+          cardNumber: e.target.card.value,
+          expiryMonth,
+          expiryYear,
+          cvv: e.target.cvv.value,
+          products: cart.map((item) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+          })),
+          total: total,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        clearCart();
+        toast.success("Payment successful!");
+        window.location.href = "/products";
+      } else {
+        toast.error("Payment failed please check your card details");
+      }
     } catch (error) {
-      toast.error("Failed to place order");
+      toast.error("Failed to process payment: " + (error.response?.data?.message || error.message));
     }
+  };
+
+  const handleExpiryChange = (e) => {
+    const [month, year] = e.target.value.split("/");
+    setExpiryMonth(month);
+    setExpiryYear(year);
   };
 
   return (
@@ -40,12 +72,6 @@ const Checkout = () => {
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="address" className="block mb-1">
-            Delivery Address
-          </label>
-          <textarea id="address" value={address} onChange={(e) => setAddress(e.target.value)} required className="w-full px-3 py-2 border rounded" />
-        </div>
-        <div>
           <label htmlFor="card" className="block mb-1">
             Card Number
           </label>
@@ -56,7 +82,7 @@ const Checkout = () => {
             <label htmlFor="expiry" className="block mb-1">
               Expiry Date
             </label>
-            <input type="text" id="expiry" placeholder="MM/YY" required className="w-full px-3 py-2 border rounded" />
+            <input type="text" id="expiry" placeholder="MM/YY" required className="w-full px-3 py-2 border rounded" onChange={handleExpiryChange} />
           </div>
           <div className="flex-1">
             <label htmlFor="cvv" className="block mb-1">
@@ -66,7 +92,7 @@ const Checkout = () => {
           </div>
         </div>
         <button type="submit" className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">
-          Place Order
+          Pay ${total.toFixed(2)}
         </button>
       </form>
     </div>

@@ -48,7 +48,6 @@ const EditProduct = () => {
 
   const updateProduct = async (productData) => {
     try {
-      debugger;
       const response = await axios.put(base_url + `/product/${id}`, productData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
