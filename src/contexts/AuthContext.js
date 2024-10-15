@@ -1,10 +1,12 @@
+import axios from "axios";
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
+  const navigate = useNavigate();
   const base_url = "http://127.0.0.1:8990/api";
 
   useEffect(() => {
@@ -43,21 +45,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    debugger;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${base_url}/logout`, {
-        method: "POST",
+      const response = await axios.post(`${base_url}/user/logout`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (!response.ok) {
+      if (!response.status === 200) {
         throw new Error("Logout failed");
       }
 
       localStorage.removeItem("token");
+      navigate("/");
     } catch (error) {
       console.error("Logout error:", error);
       throw error;
