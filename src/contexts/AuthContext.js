@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -45,7 +46,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    debugger;
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(`${base_url}/user/logout`, {
@@ -77,14 +77,11 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(userData),
       });
 
-      if (!response.ok) {
+      if (!response.status === 200) {
         throw new Error("Registration failed");
       }
 
       const data = await response.json();
-      if (!data.token) {
-        throw new Error("Token not received");
-      }
       return data;
     } catch (error) {
       console.error("Registration error:", error);
@@ -100,7 +97,20 @@ export const AuthProvider = ({ children }) => {
     return !!getToken();
   };
 
-  return <AuthContext.Provider value={{ user, login, logout, register }}>{children}</AuthContext.Provider>;
+  const checkTokenExpiration = () => {
+    let decodedToken = jwtDecode(localStorage.getItem("token"));
+    let currentDate = new Date();
+
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      console.log("Token expired.");
+      window.location.href = "/";
+      sessionStorage.removeItem("token");
+      return true;
+    }
+    return false;
+  };
+
+  return <AuthContext.Provider value={{ user, login, logout, register, checkTokenExpiration }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);

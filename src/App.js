@@ -9,35 +9,11 @@ import ProductList from "./components/ProductList";
 import Checkout from "./components/Checkout";
 import EditProduct from "./components/EditProduct";
 import AddProduct from "./components/AddProduct";
-import PrivateRoute from "./components/PrivateRoute";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
 
 function App() {
-  const [isTokenValid, setIsTokenValid] = useState(false);
-
-  useEffect(() => {
-    const checkTokenExpiration = () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setIsTokenValid(false);
-        return;
-      }
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        const currentTime = Math.floor(Date.now() / 1000);
-        setIsTokenValid(payload.exp > currentTime);
-      } catch (error) {
-        console.error("Error parsing token:", error);
-        setIsTokenValid(false);
-      }
-    };
-
-    checkTokenExpiration();
-    const intervalId = setInterval(checkTokenExpiration, 60000);
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const checkTokenExpiration = useAuth();
 
   return (
     <Router>
@@ -49,7 +25,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                {isTokenValid ? (
+                {!checkTokenExpiration ? (
                   <>
                     <Route path="/products" element={<ProductList />} />
                     <Route path="/checkout" element={<Checkout />} />

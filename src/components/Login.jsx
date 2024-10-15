@@ -14,9 +14,9 @@ const Login = () => {
     try {
       await login(email, password);
       toast.success("Logged in successfully");
-      navigate("/products");
+      window.location.href = "/products";
     } catch (error) {
-      toast.error("Failed to log in");
+      toast.error("Username or Password Incorrect");
     }
   };
 

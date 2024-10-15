@@ -1,38 +1,12 @@
-import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
 
 const Navbar = () => {
+  const token = localStorage.getItem("token");
   const { logout } = useAuth();
   const location = useLocation();
   const { cart } = useCart();
-  const [isTokenValid, setIsTokenValid] = useState(false);
-
-  useEffect(() => {
-    const checkTokenValidity = () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setIsTokenValid(false);
-        return;
-      }
-
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        const currentTime = Math.floor(Date.now() / 1000);
-        setIsTokenValid(payload.exp > currentTime);
-      } catch (error) {
-        console.error("Error parsing token:", error);
-        setIsTokenValid(false);
-      }
-    };
-
-    checkTokenValidity();
-    const intervalId = setInterval(checkTokenValidity, 60000); // Check every minute
-
-    return () => clearInterval(intervalId);
-  }, []);
 
   return (
     <nav className="bg-gray-800 text-white p-4">
@@ -41,7 +15,7 @@ const Navbar = () => {
           Smatech-e-commerce Store
         </Link>
         <div className="space-x-4">
-          {isTokenValid ? (
+          {token ? (
             <>
               <Link to="/products" className="hover:text-gray-300">
                 Products
