@@ -9,6 +9,7 @@ import ProductList from "./components/ProductList";
 import Checkout from "./components/Checkout";
 import EditProduct from "./components/EditProduct";
 import AddProduct from "./components/AddProduct";
+import ResetPassword from "./components/ResetPassword";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
 
@@ -25,6 +26,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 {!checkTokenExpiration ? (
                   <>
                     <Route path="/products" element={<ProductList />} />

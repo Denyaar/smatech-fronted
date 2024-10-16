@@ -20,6 +20,10 @@ const Login = () => {
     }
   };
 
+  const handleResetPassword = () => {
+    window.location.href = "/reset-password";
+  };
+
   return (
     <div className="max-w-md mx-auto">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
@@ -40,6 +44,9 @@ const Login = () => {
           Login
         </button>
       </form>
+      <button onClick={handleResetPassword} className="w-full mt-4 bg-gray-500 text-white py-2 rounded hover:bg-gray-600">
+        Reset Password
+      </button>
     </div>
   );
 };
