@@ -11,7 +11,8 @@ const ResetPassword = () => {
 
   const resetPassword = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/user/password-reset`, {
+      const response = await fetch(`${BASE_URL}/user/password-reset`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
