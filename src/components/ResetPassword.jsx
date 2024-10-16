@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -10,8 +11,7 @@ const ResetPassword = () => {
 
   const resetPassword = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/user/password-reset`, {
-        method: "POST",
+      const response = await axios.post(`${BASE_URL}/user/password-reset`, {
         headers: {
           "Content-Type": "application/json",
         },
