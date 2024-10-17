@@ -10,8 +10,10 @@ const ResetPassword = () => {
   const BASE_URL = "http://127.0.0.1:8990/api";
 
   const resetPassword = async () => {
+    debugger;
     try {
-      const response = await axios.post(`${BASE_URL}/user/password-reset`, {
+      const response = await fetch(`${BASE_URL}/user/auth/password-reset`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -20,7 +22,10 @@ const ResetPassword = () => {
 
       if (response.ok) {
         toast.success("Password reset successfully!");
-        window.location.href = "/login";
+
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || "Failed to reset password");
@@ -32,6 +37,7 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(email, password, confirmPassword);
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
