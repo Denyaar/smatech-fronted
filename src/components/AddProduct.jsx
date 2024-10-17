@@ -66,7 +66,7 @@ const AddProduct = () => {
       formData.append("file", file, file.name);
       formData.append("id", data.id);
 
-      const { data: imageUrl } = await updatePhoto(formData);
+      await updatePhoto(formData);
 
       setFile(undefined);
       fileRef.current.value = null;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { toast } from "react-toastify";
-import axios from "axios";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);

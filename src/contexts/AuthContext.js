@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
@@ -90,13 +90,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const getToken = () => {
-    return localStorage.getItem("token");
-  };
+  // const getToken = () => {
+  //   return localStorage.getItem("token");
+  // };
 
-  const isAuthenticated = () => {
-    return !!getToken();
-  };
+  // const isAuthenticated = () => {
+  //   return !!getToken();
+  // };
 
   const checkTokenExpiration = () => {
     let decodedToken = jwtDecode(localStorage.getItem("token"));
